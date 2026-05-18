@@ -7,16 +7,19 @@ const PAGE = 50
 
 export default function DataTable() {
   const { filtered, loading, error } = useContext(DataContext)
-  const [page, setPage] = useState(0)
+  const [page, setPage]   = useState(0)
   const [search, setSearch] = useState('')
-  const [sortKey, setSortKey] = useState('fpo')
-  const [sortDir, setSortDir] = useState('desc')
+  const [sortKey, setSortKey] = useState('slNo')
+  const [sortDir, setSortDir] = useState('asc')
 
   const rows = useMemo(() => {
     let r = [...filtered]
     if (search) {
       const q = search.toLowerCase()
-      r = r.filter(m => m.fpo?.toLowerCase().includes(q) || m.plotName?.toLowerCase().includes(q) || m.farmerName?.toLowerCase().includes(q))
+      r = r.filter(m =>
+        m.fpo?.toLowerCase().includes(q) ||
+        m.farmerName?.toLowerCase().includes(q)
+      )
     }
     r.sort((a, b) => {
       const av = a[sortKey] ?? ''
@@ -37,7 +40,6 @@ export default function DataTable() {
 
   const arrow = (key) => sortKey === key ? (sortDir === 'asc' ? ' ↑' : ' ↓') : ''
 
-
   if (loading) return <div className="page-loader"><div className="loader-spin" /><p>Loading data…</p></div>
   if (error)   return <div className="page-error">{error}</div>
 
@@ -54,7 +56,7 @@ export default function DataTable() {
         <input
           className="dt-search"
           type="text"
-          placeholder="Search FPO, farmer, plot…"
+          placeholder="Search FPO or farmer name…"
           value={search}
           onChange={(e) => { setSearch(e.target.value); setPage(0) }}
         />
@@ -64,34 +66,34 @@ export default function DataTable() {
         <table className="dt">
           <thead>
             <tr>
+              <th onClick={() => handleSort('slNo')} className="sortable">Sl No{arrow('slNo')}</th>
+              <th onClick={() => handleSort('farmerName')} className="sortable">Name{arrow('farmerName')}</th>
               <th onClick={() => handleSort('fpo')} className="sortable">FPO{arrow('fpo')}</th>
-              <th>Farmer</th>
-              <th>Plot</th>
               <th onClick={() => handleSort('soil_ph')} className="sortable">pH{arrow('soil_ph')}</th>
-              <th>Moisture%</th>
-              <th>N</th>
-              <th>P</th>
-              <th>K</th>
-              <th>EC μS/cm</th>
-              <th>Temp °C</th>
+              <th onClick={() => handleSort('soil_electricity_conductivity')} className="sortable">EC{arrow('soil_electricity_conductivity')}</th>
+              <th onClick={() => handleSort('nitrogen')} className="sortable">Nitrogen{arrow('nitrogen')}</th>
+              <th onClick={() => handleSort('potassium')} className="sortable">Potassium{arrow('potassium')}</th>
+              <th onClick={() => handleSort('phosphorus')} className="sortable">Phosphorus{arrow('phosphorus')}</th>
+              <th onClick={() => handleSort('soil_temperature')} className="sortable">Temperature{arrow('soil_temperature')}</th>
+              <th onClick={() => handleSort('soil_humidity')} className="sortable">Moisture{arrow('soil_humidity')}</th>
             </tr>
           </thead>
           <tbody>
             {paged.length === 0 && (
-              <tr><td colSpan={11} className="dt-empty">No records found</td></tr>
+              <tr><td colSpan={10} className="dt-empty">No records found</td></tr>
             )}
             {paged.map((row, i) => (
               <tr key={i}>
-                <td><span className="fpo-chip">{row.fpo}</span></td>
+                <td>{row.slNo}</td>
                 <td>{row.farmerName || '—'}</td>
-                <td>{row.plotName || '—'}</td>
+                <td><span className="fpo-chip">{row.fpo}</span></td>
                 <td className={row.soil_ph < 6 ? 'val-warn' : row.soil_ph > 7 ? 'val-hi' : 'val-ok'}>{fmt(row.soil_ph)}</td>
-                <td>{fmt(row.soil_humidity)}</td>
-                <td>{fmt(row.nitrogen)}</td>
-                <td>{fmt(row.phosphorus)}</td>
-                <td>{fmt(row.potassium)}</td>
                 <td>{fmt(row.soil_electricity_conductivity)}</td>
+                <td>{fmt(row.nitrogen)}</td>
+                <td>{fmt(row.potassium)}</td>
+                <td>{fmt(row.phosphorus)}</td>
                 <td>{fmt(row.soil_temperature)}</td>
+                <td>{fmt(row.soil_humidity)}</td>
               </tr>
             ))}
           </tbody>

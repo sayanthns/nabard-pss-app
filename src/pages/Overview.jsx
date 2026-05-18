@@ -95,9 +95,9 @@ export default function Overview() {
       <div className="stat-grid">
         <StatCard label="AVG PH"       value={stats.avgPh}    accent={ACCENT.ph}   sub={`${stats.acidic} acidic · ${stats.neutral} neutral`} />
         <StatCard label="AVG EC"       value={stats.avgEc}    unit="μS/cm" accent={ACCENT.ec}   sub="Electrical conductivity" />
-        <StatCard label="NITROGEN"     value={stats.avgN}     unit="kg/ha" accent={ACCENT.n}    sub="Avg available N" />
-        <StatCard label="PHOSPHORUS"   value={stats.avgP}     unit="kg/ha" accent={ACCENT.p}    sub="Avg available P" />
-        <StatCard label="POTASSIUM"    value={stats.avgK}     unit="kg/ha" accent={ACCENT.k}    sub="Avg available K" />
+        <StatCard label="NITROGEN"     value={stats.avgN}     unit="mg/kg" accent={ACCENT.n}    sub="Avg available N" />
+        <StatCard label="PHOSPHORUS"   value={stats.avgP}     unit="mg/kg" accent={ACCENT.p}    sub="Avg available P" />
+        <StatCard label="POTASSIUM"    value={stats.avgK}     unit="mg/kg" accent={ACCENT.k}    sub="Avg available K" />
         <StatCard label="TEMPERATURE"  value={stats.avgTemp}  unit="°C"    accent={ACCENT.temp} sub="Avg soil temp" />
         <StatCard label="MOISTURE"     value={stats.avgMoist} unit="%"     accent={ACCENT.moist} sub="Avg soil moisture" />
         <StatCard label="TOTAL RECORDS" value={filtered.length.toLocaleString()} accent="#1A3829"
@@ -153,7 +153,7 @@ export default function Overview() {
         <div className="chart-card wide">
           <div className="chart-card-header">
             <h3>Nutrients by FPO</h3>
-            <p>Avg N, P, K per region (kg/ha)</p>
+            <p>Avg N, P, K per region (mg/kg)</p>
           </div>
           <div className="chart-body">
             {fpoStats.labels.length ? (

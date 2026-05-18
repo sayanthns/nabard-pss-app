@@ -43,7 +43,6 @@ export default function Sidebar({ collapsed }) {
         }
       </div>
 
-      {!collapsed && <div className="sb-org">KERALA FPO NETWORK</div>}
 
       <nav className="sb-nav">
         {!collapsed && <div className="sb-nav-label">Navigation</div>}

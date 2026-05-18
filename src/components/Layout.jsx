@@ -38,13 +38,14 @@ export default function Layout() {
   const [selectedFpo, setSelectedFpo] = useState('All')
 
   useEffect(() => {
-    fetchFromBackend()
+    // Load sample data immediately; swap to live data if backend responds within 4s
+    const { metrics: sampleMetrics, fpos: sampleFpos } = generateSampleData()
+    setData({ metrics: sampleMetrics, fpos: sampleFpos, loading: false, error: '', demo: true })
+
+    const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 4000))
+    Promise.race([fetchFromBackend(), timeout])
       .then(({ metrics, fpos }) => setData({ metrics, fpos, loading: false, error: '', demo: false }))
-      .catch(() => {
-        // Fall back to sample data
-        const { metrics, fpos } = generateSampleData()
-        setData({ metrics, fpos, loading: false, error: '', demo: true })
-      })
+      .catch(() => { /* keep sample data */ })
   }, [])
 
   const filtered = selectedFpo === 'All'

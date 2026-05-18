@@ -41,21 +41,6 @@ export default function DataTable() {
 
   const arrow = (key) => sortKey === key ? (sortDir === 'asc' ? ' ↑' : ' ↓') : ''
 
-  const handleExportCsv = () => {
-    const headers = ['Time','FPO','Farmer','Plot','pH','Moisture %','N kg/ha','P kg/ha','K kg/ha','EC μS/cm','Temp °C']
-    const csvRows = [headers, ...rows.map(m => [
-      fmtTime(m.time), m.fpo, m.farmerName, m.plotName,
-      m.soil_ph ?? '', m.soil_humidity ?? '', m.nitrogen ?? '',
-      m.phosphorus ?? '', m.potassium ?? '',
-      m.soil_electricity_conductivity ?? '', m.soil_temperature ?? '',
-    ])]
-    const csv = csvRows.map(r => r.join(',')).join('\n')
-    const blob = new Blob([csv], { type: 'text/csv' })
-    const a = document.createElement('a')
-    a.href = URL.createObjectURL(blob)
-    a.download = 'nabard-soil-data.csv'
-    a.click()
-  }
 
   if (loading) return <div className="page-loader"><div className="loader-spin" /><p>Loading data…</p></div>
   if (error)   return <div className="page-error">{error}</div>
@@ -67,12 +52,6 @@ export default function DataTable() {
           <h1 className="page-title">Data Table</h1>
           <p className="page-sub">{rows.length.toLocaleString()} records</p>
         </div>
-        <button className="dt-export-btn" onClick={handleExportCsv}>
-          <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
-            <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd"/>
-          </svg>
-          Export CSV
-        </button>
       </div>
 
       <div className="dt-toolbar">

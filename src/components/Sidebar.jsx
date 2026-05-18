@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext.jsx'
 
@@ -20,23 +19,13 @@ const NAV = [
   },
 ]
 
-export default function Sidebar({ fpos, selectedFpo, onFpoChange, collapsed, onToggle }) {
+export default function Sidebar({ collapsed }) {
   const { logout } = useAuth()
 
   return (
     <aside className={`sidebar${collapsed ? ' collapsed' : ''}`}>
-      {/* Collapse toggle */}
-      <button className="sb-toggle" onClick={onToggle} title={collapsed ? 'Expand' : 'Collapse'}>
-        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-          {collapsed
-            ? <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"/>
-            : <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"/>
-          }
-        </svg>
-      </button>
-
-      {/* Deepflow brand */}
-      <div className="sb-brand">
+      {/* Logos — side by side */}
+      <div className="sb-logos">
         {collapsed
           ? <div className="sb-icon-sm">
               <svg viewBox="0 0 32 32" fill="none">
@@ -46,38 +35,30 @@ export default function Sidebar({ fpos, selectedFpo, onFpoChange, collapsed, onT
                 <circle cx="16" cy="16" r="3" fill="white"/>
               </svg>
             </div>
-          : <img src={DEEPFLOW_LOGO} alt="Deepflow" className="sb-deepflow-logo" />
+          : <>
+              <img src={DEEPFLOW_LOGO} alt="Deepflow" className="sb-deepflow-logo" />
+              <div className="sb-logo-divider" />
+              <img src={NABARD_LOGO} alt="NABARD" className="sb-nabard-logo" />
+            </>
         }
       </div>
-
-      {/* NABARD logo strip */}
-      {!collapsed && (
-        <div className="sb-nabard">
-          <img src={NABARD_LOGO} alt="NABARD" className="sb-nabard-logo" />
-        </div>
-      )}
 
       {!collapsed && <div className="sb-org">KERALA FPO NETWORK</div>}
 
       <nav className="sb-nav">
         {!collapsed && <div className="sb-nav-label">Navigation</div>}
         {NAV.map((item) => (
-          <NavLink key={item.to} to={item.to} className={({ isActive }) => `sb-link${isActive ? ' active' : ''}`} title={collapsed ? item.label : undefined}>
+          <NavLink
+            key={item.to}
+            to={item.to}
+            className={({ isActive }) => `sb-link${isActive ? ' active' : ''}`}
+            title={collapsed ? item.label : undefined}
+          >
             <span className="sb-link-icon">{item.icon}</span>
             {!collapsed && item.label}
           </NavLink>
         ))}
       </nav>
-
-      {!collapsed && (
-        <div className="sb-filter">
-          <div className="sb-nav-label">Filter by FPO</div>
-          <select className="sb-select" value={selectedFpo} onChange={(e) => onFpoChange(e.target.value)}>
-            <option value="All">All</option>
-            {fpos.map((f) => <option key={f} value={f}>{f}</option>)}
-          </select>
-        </div>
-      )}
 
       <div className="sb-footer">
         <button className="sb-logout" onClick={logout} title="Sign out">

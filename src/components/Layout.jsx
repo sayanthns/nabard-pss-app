@@ -34,12 +34,11 @@ async function fetchFromBackend() {
 }
 
 export default function Layout() {
-  const [data, setData]     = useState({ metrics: [], fpos: [], loading: true, error: '', demo: false })
+  const [data, setData]       = useState({ metrics: [], fpos: [], loading: true, error: '', demo: false })
   const [selectedFpo, setSelectedFpo] = useState('All')
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed]     = useState(false)
 
   useEffect(() => {
-    // Load sample data immediately; swap to live data if backend responds within 4s
     const { metrics: sampleMetrics, fpos: sampleFpos } = generateSampleData()
     setData({ metrics: sampleMetrics, fpos: sampleFpos, loading: false, error: '', demo: true })
 
@@ -56,13 +55,42 @@ export default function Layout() {
   return (
     <DataContext.Provider value={{ ...data, filtered, selectedFpo }}>
       <div className={`app-shell${collapsed ? ' sb-collapsed' : ''}`}>
-        <Sidebar fpos={data.fpos} selectedFpo={selectedFpo} onFpoChange={setSelectedFpo} demo={data.demo} collapsed={collapsed} onToggle={() => setCollapsed(c => !c)} />
+        <Sidebar collapsed={collapsed} />
+
+        {/* Collapse toggle — outside sidebar so it's never clipped */}
+        <button
+          className="sb-toggle"
+          onClick={() => setCollapsed(c => !c)}
+          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        >
+          <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+            {collapsed
+              ? <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"/>
+              : <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"/>
+            }
+          </svg>
+        </button>
+
         <main className="main-content">
-          {data.demo && (
-            <div className="demo-banner">
-              📊 Showing sample data — connect to live backend to view real sensor readings
+          {/* Top filter + demo bar */}
+          <div className="top-bar">
+            <div className="top-bar-left">
+              {data.demo && (
+                <span className="demo-pill">📊 Sample data — connect backend for live readings</span>
+              )}
             </div>
-          )}
+            <div className="top-bar-filter">
+              <label className="top-bar-label">Filter by FPO</label>
+              <select
+                className="top-bar-select"
+                value={selectedFpo}
+                onChange={(e) => setSelectedFpo(e.target.value)}
+              >
+                <option value="All">All FPOs</option>
+                {data.fpos.map((f) => <option key={f} value={f}>{f}</option>)}
+              </select>
+            </div>
+          </div>
           <Outlet />
         </main>
       </div>

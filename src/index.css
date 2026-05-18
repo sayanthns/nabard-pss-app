@@ -60,54 +60,56 @@ body {
   flex-direction: column;
   padding: 0;
   z-index: 100;
-  transition: width 0.2s ease;
+  transition: width 0.22s ease;
   overflow: hidden;
 }
 
-.sb-brand {
+/* Logos row — Deepflow + divider + NABARD side by side */
+.sb-logos {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 22px 20px 18px;
+  gap: 10px;
+  padding: 16px 14px;
   border-bottom: 1px solid rgba(255,255,255,0.08);
+  min-height: 70px;
 }
 
-.sb-icon {
-  width: 38px;
-  height: 38px;
+.sb-deepflow-logo {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: brightness(0) invert(1);
+}
+
+.sb-logo-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(255,255,255,0.2);
   flex-shrink: 0;
 }
-.sb-icon svg { width: 100%; height: 100% }
 
-.sb-name {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 500;
-  color: #FFFFFF;
-  letter-spacing: 0.01em;
-  line-height: 1.1;
-}
-.sb-name-2 {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 400;
-  color: rgba(255,255,255,0.6);
-  line-height: 1.1;
+.sb-nabard-logo {
+  height: 34px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: brightness(0) invert(1);
 }
 
-.sb-nabard {
-  padding: 12px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  background: rgba(0,48,135,0.25);
+.sb-icon-sm {
+  width: 32px; height: 32px;
+  flex-shrink: 0;
+  margin: 0 auto;
 }
-.nabard-logo-svg { width: 100%; height: auto; display: block }
+.sb-icon-sm svg { width: 100%; height: 100% }
 
 .sb-org {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.15em;
-  color: rgba(255,255,255,0.35);
-  padding: 14px 20px 6px;
+  color: rgba(255,255,255,0.3);
+  padding: 12px 16px 4px;
   text-transform: uppercase;
 }
 
@@ -118,7 +120,7 @@ body {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: rgba(255,255,255,0.3);
-  padding: 12px 8px 6px;
+  padding: 10px 8px 6px;
 }
 
 .sb-link {
@@ -148,26 +150,6 @@ body {
 .sb-link.active .sb-link-icon { opacity: 1 }
 .sb-link-icon svg { width: 100%; height: 100% }
 
-.sb-filter {
-  padding: 12px 12px 8px;
-  border-top: 1px solid rgba(255,255,255,0.08);
-}
-
-.sb-select {
-  width: 100%;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 8px;
-  padding: 8px 10px;
-  color: rgba(255,255,255,0.8);
-  font-family: var(--font-body);
-  font-size: 0.82rem;
-  outline: none;
-  cursor: pointer;
-  margin-top: 4px;
-}
-.sb-select option { background: var(--sb-bg); color: #fff }
-
 .sb-footer {
   padding: 12px;
   border-top: 1px solid rgba(255,255,255,0.08);
@@ -190,14 +172,98 @@ body {
 }
 .sb-logout:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7) }
 
+/* Collapsed overrides */
+.sidebar.collapsed .sb-logos { justify-content: center; padding: 16px 0 }
+.sidebar.collapsed .sb-link  { justify-content: center; padding: 9px 0 }
+.sidebar.collapsed .sb-logout { justify-content: center; padding: 8px 0 }
+.sidebar.collapsed .sb-footer { padding: 12px 8px }
+
+/* Collapse toggle — lives in app-shell, NOT inside sidebar */
+.sb-toggle {
+  position: fixed;
+  top: 22px;
+  left: calc(var(--sb-w) - 13px);
+  width: 26px; height: 26px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-2);
+  box-shadow: var(--shadow-sm);
+  z-index: 200;
+  transition: left 0.22s ease, background 0.12s;
+}
+.sb-toggle:hover { background: var(--bg) }
+
 /* ── Main content ────────────────────────────────────────── */
 .main-content {
   margin-left: var(--sb-w);
   flex: 1;
   min-height: 100vh;
   background: var(--bg);
-  transition: margin-left 0.2s ease;
+  transition: margin-left 0.22s ease;
 }
+
+/* ── Top bar (FPO filter + demo pill) ───────────────────── */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 32px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.top-bar-left { flex: 1 }
+
+.demo-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #FEF9EC;
+  border: 1px solid #F5D88A;
+  color: #92600A;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.top-bar-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.top-bar-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.top-bar-select {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.83rem;
+  outline: none;
+  cursor: pointer;
+  min-width: 140px;
+}
+.top-bar-select:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(46,125,82,0.1) }
 
 .page-inner {
   padding: 28px 32px 48px;
@@ -680,15 +746,6 @@ body {
   to   { opacity: 1; transform: translateY(0) }
 }
 
-/* ── Demo banner ─────────────────────────────────────────── */
-.demo-banner {
-  background: #FEF9EC;
-  border-bottom: 1px solid #F5D88A;
-  padding: 9px 32px;
-  font-size: 0.78rem;
-  color: #92600A;
-  font-weight: 500;
-}
 
 /* ── Scrollbar ───────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; height: 5px }
@@ -711,67 +768,12 @@ body {
 
 /* ── Sidebar collapse ────────────────────────────────────── */
 :root { --sb-w-collapsed: 60px }
-
 .app-shell.sb-collapsed { --sb-w: var(--sb-w-collapsed) }
-
-.sidebar.collapsed {
-  width: var(--sb-w-collapsed);
-  overflow: hidden;
-}
-
-.sidebar.collapsed .sb-brand { padding: 18px 10px; justify-content: center }
-.sidebar.collapsed .sb-link  { justify-content: center; padding: 9px 0 }
-.sidebar.collapsed .sb-logout { justify-content: center; padding: 8px 0 }
-.sidebar.collapsed .sb-footer { padding: 12px 8px }
-
-.sb-toggle {
-  position: absolute;
-  top: 12px;
-  right: -14px;
-  width: 26px; height: 26px;
-  background: var(--white);
-  border: 1.5px solid var(--border);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--text-2);
-  box-shadow: var(--shadow-xs);
-  z-index: 101;
-  transition: background 0.12s;
-}
-.sb-toggle:hover { background: var(--bg) }
-
-/* Deepflow logo in sidebar */
-.sb-deepflow-logo {
-  display: block;
-  height: 32px;
-  width: auto;
-  object-fit: contain;
-  filter: brightness(0) invert(1);
-}
-
-/* Deepflow icon mark for collapsed state */
-.sb-icon-sm {
-  width: 32px; height: 32px;
-  flex-shrink: 0;
-}
-.sb-icon-sm svg { width: 100%; height: 100% }
-
-/* NABARD logo in sidebar */
-.sb-nabard-logo {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-height: 44px;
-  object-fit: contain;
-  filter: brightness(0) invert(1);
-}
+.sidebar.collapsed { width: var(--sb-w-collapsed) }
 
 /* Login page logo images */
 .login-deepflow-logo {
-  height: 42px;
+  height: 38px;
   width: auto;
   object-fit: contain;
 }
@@ -786,7 +788,7 @@ body {
   object-fit: contain;
 }
 .login-footer-deepflow {
-  height: 16px;
+  height: 14px;
   width: auto;
   object-fit: contain;
 }

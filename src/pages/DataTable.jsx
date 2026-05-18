@@ -2,10 +2,6 @@ import { useContext, useState, useMemo } from 'react'
 import { DataContext } from '../components/Layout.jsx'
 
 function fmt(v) { return v != null ? Number(v).toFixed(2) : '—' }
-function fmtTime(t) {
-  if (!t) return '—'
-  return new Date(t).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-}
 
 const PAGE = 50
 
@@ -13,7 +9,7 @@ export default function DataTable() {
   const { filtered, loading, error } = useContext(DataContext)
   const [page, setPage] = useState(0)
   const [search, setSearch] = useState('')
-  const [sortKey, setSortKey] = useState('time')
+  const [sortKey, setSortKey] = useState('fpo')
   const [sortDir, setSortDir] = useState('desc')
 
   const rows = useMemo(() => {
@@ -68,7 +64,6 @@ export default function DataTable() {
         <table className="dt">
           <thead>
             <tr>
-              <th onClick={() => handleSort('time')} className="sortable">Timestamp{arrow('time')}</th>
               <th onClick={() => handleSort('fpo')} className="sortable">FPO{arrow('fpo')}</th>
               <th>Farmer</th>
               <th>Plot</th>
@@ -87,7 +82,6 @@ export default function DataTable() {
             )}
             {paged.map((row, i) => (
               <tr key={i}>
-                <td className="td-time">{fmtTime(row.time)}</td>
                 <td><span className="fpo-chip">{row.fpo}</span></td>
                 <td>{row.farmerName || '—'}</td>
                 <td>{row.plotName || '—'}</td>

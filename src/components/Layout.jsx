@@ -74,11 +74,7 @@ export default function Layout() {
         <main className="main-content">
           {/* Top filter + demo bar */}
           <div className="top-bar">
-            <div className="top-bar-left">
-              {data.demo && (
-                <span className="demo-pill">📊 Sample data — connect backend for live readings</span>
-              )}
-            </div>
+            <div className="top-bar-left"></div>
             <div className="top-bar-filter">
               <label className="top-bar-label">Filter by FPO</label>
               <select

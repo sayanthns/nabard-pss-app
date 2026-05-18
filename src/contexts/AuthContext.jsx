@@ -1,6 +1,6 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState } from 'react'
 
-const AuthCtx = createContext(null)
+const Ctx = createContext(null)
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
@@ -14,16 +14,13 @@ export function AuthProvider({ children }) {
     setUser(userData)
   }
 
-  const logout = () => {
-    localStorage.clear()
-    setUser(null)
-  }
+  const logout = () => { localStorage.clear(); setUser(null) }
 
   return (
-    <AuthCtx.Provider value={{ user, login, logout, isAuth: !!user }}>
+    <Ctx.Provider value={{ user, login, logout, isAuth: !!user }}>
       {children}
-    </AuthCtx.Provider>
+    </Ctx.Provider>
   )
 }
 
-export const useAuth = () => useContext(AuthCtx)
+export const useAuth = () => useContext(Ctx)

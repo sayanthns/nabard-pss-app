@@ -639,6 +639,16 @@ body {
   to   { opacity: 1; transform: translateY(0) }
 }
 
+/* ── Demo banner ─────────────────────────────────────────── */
+.demo-banner {
+  background: #FEF9EC;
+  border-bottom: 1px solid #F5D88A;
+  padding: 9px 32px;
+  font-size: 0.78rem;
+  color: #92600A;
+  font-weight: 500;
+}
+
 /* ── Scrollbar ───────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; height: 5px }
 ::-webkit-scrollbar-track { background: transparent }

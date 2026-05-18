@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext.jsx'
 import { apiLogin } from '../api.js'
 
+const DEEPFLOW_LOGO = 'https://nabard-soil-monitor.vercel.app/images/Logo_Long.png'
+const NABARD_LOGO   = 'https://nabard-soil-monitor.vercel.app/images/1303194734NABARD-ENG-logo-big.png'
+
 export default function Login() {
   const { login } = useAuth()
   const navigate = useNavigate()
@@ -29,24 +32,23 @@ export default function Login() {
 
   return (
     <div className="login-shell">
-      <div className="login-brand">
-        <div className="login-brand-icon">
-          <svg viewBox="0 0 40 40" fill="none">
-            <circle cx="20" cy="20" r="18" fill="#2E7D52" opacity="0.12"/>
-            <path d="M20 8C13.4 8 8 13.4 8 20s5.4 12 12 12" stroke="#2E7D52" strokeWidth="2.2" strokeLinecap="round"/>
-            <path d="M20 8c6.6 0 12 5.4 12 12s-5.4 12-12 12" stroke="#1A3829" strokeWidth="2.2" strokeLinecap="round"/>
-            <circle cx="20" cy="20" r="3.5" fill="#1A3829"/>
-          </svg>
-        </div>
-        <div>
-          <h1 className="login-title">Soil Sensor Dashboard</h1>
-          <p className="login-org">NABARD · Kerala FPO Network</p>
-        </div>
+      {/* Brand header */}
+      <div className="login-header">
+        <img src={DEEPFLOW_LOGO} alt="Deepflow Technologies" className="login-deepflow-logo" />
+        <div className="login-header-divider" />
+        <img src={NABARD_LOGO} alt="NABARD" className="login-nabard-logo" />
       </div>
 
+      {/* Hero text */}
+      <div className="login-hero">
+        <h1 className="login-hero-title">Soil Assessment</h1>
+        <p className="login-hero-sub">Portable Soil Sensor Device</p>
+      </div>
+
+      {/* Card */}
       <div className="login-card">
-        <h2 className="login-card-title">Sign in</h2>
-        <p className="login-card-sub">Admin access required</p>
+        <h2 className="login-card-title">Admin Sign In</h2>
+        <p className="login-card-sub">Dashboard access for authorised officials</p>
 
         {error && <div className="alert-error">{error}</div>}
 
@@ -60,12 +62,18 @@ export default function Login() {
             <input type="password" value={form.password} onChange={set('password')} placeholder="••••••••" required />
           </div>
           <button type="submit" disabled={loading}>
-            {loading ? 'Signing in…' : 'Sign in'}
+            {loading ? 'Signing in…' : 'Sign In'}
           </button>
         </form>
       </div>
 
-      <p className="login-footer">In association with NABARD · Deepflow Technologies</p>
+      {/* Footer */}
+      <div className="login-footer">
+        <span>In Association with</span>
+        <img src={NABARD_LOGO} alt="NABARD" className="login-footer-nabard" />
+        <span className="login-footer-dot">·</span>
+        <img src={DEEPFLOW_LOGO} alt="Deepflow" className="login-footer-deepflow" />
+      </div>
     </div>
   )
 }

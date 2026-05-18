@@ -60,6 +60,8 @@ body {
   flex-direction: column;
   padding: 0;
   z-index: 100;
+  transition: width 0.2s ease;
+  overflow: hidden;
 }
 
 .sb-brand {
@@ -194,6 +196,7 @@ body {
   flex: 1;
   min-height: 100vh;
   background: var(--bg);
+  transition: margin-left 0.2s ease;
 }
 
 .page-inner {
@@ -488,34 +491,57 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(145deg, #F5F4EF 0%, #EAF0EA 100%);
-  padding: 24px;
-  gap: 28px;
+  gap: 24px;
+  padding: 32px 20px;
+  background: linear-gradient(160deg, #F0EEE7 0%, #EAF0EA 55%, #F0EEE7 100%);
+  position: relative;
+  overflow: hidden;
 }
 
-.login-brand {
+/* subtle background texture */
+.login-shell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse 600px 400px at 80% 20%, rgba(46,125,82,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 20% 80%, rgba(0,48,135,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.login-header {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 18px;
+  position: relative;
 }
 
-.login-brand-icon {
-  width: 52px; height: 52px;
+.login-header-divider {
+  width: 1px;
+  height: 44px;
+  background: var(--border-2);
 }
-.login-brand-icon svg { width: 100%; height: 100% }
 
-.login-title {
+.login-hero {
+  text-align: center;
+  position: relative;
+}
+
+.login-hero-title {
   font-family: var(--font-display);
-  font-size: 1.7rem;
-  font-weight: 500;
+  font-size: 2.6rem;
+  font-weight: 400;
   color: #1A1A1A;
   letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 6px;
 }
-.login-org {
-  font-size: 0.75rem;
+
+.login-hero-sub {
+  font-size: 0.875rem;
   color: var(--text-muted);
-  margin-top: 2px;
   font-weight: 400;
+  letter-spacing: 0.01em;
 }
 
 .login-card {
@@ -526,19 +552,21 @@ body {
   padding: 32px 36px;
   width: 100%;
   max-width: 380px;
+  position: relative;
 }
 
 .login-card-title {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 1.45rem;
   font-weight: 500;
   color: var(--text);
   margin-bottom: 4px;
 }
 .login-card-sub {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   margin-bottom: 22px;
+  line-height: 1.4;
 }
 
 .alert-error {
@@ -564,10 +592,10 @@ body {
 }
 
 .lf-group label {
-  font-size: 0.73rem;
-  font-weight: 600;
+  font-size: 0.7rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   color: var(--text-muted);
 }
 
@@ -592,22 +620,28 @@ body {
   color: var(--white);
   border: none;
   border-radius: 8px;
-  padding: 11px;
+  padding: 12px;
   font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   margin-top: 4px;
   transition: background 0.12s, transform 0.1s;
+  letter-spacing: 0.02em;
 }
 .login-form button:hover { background: #243f32 }
 .login-form button:active { transform: scale(0.98) }
 .login-form button:disabled { opacity: 0.55; cursor: not-allowed }
 
 .login-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 0.73rem;
   color: var(--text-muted);
+  position: relative;
 }
+.login-footer-dot { color: var(--border-2) }
 
 /* ── Loaders / errors ────────────────────────────────────── */
 .page-loader {
@@ -673,4 +707,86 @@ body {
   .sidebar { transform: translateX(-240px); width: 240px }
   .main-content { margin-left: 0 }
   .stat-grid { grid-template-columns: 1fr 1fr }
+}
+
+/* ── Sidebar collapse ────────────────────────────────────── */
+:root { --sb-w-collapsed: 60px }
+
+.app-shell.sb-collapsed { --sb-w: var(--sb-w-collapsed) }
+
+.sidebar.collapsed {
+  width: var(--sb-w-collapsed);
+  overflow: hidden;
+}
+
+.sidebar.collapsed .sb-brand { padding: 18px 10px; justify-content: center }
+.sidebar.collapsed .sb-link  { justify-content: center; padding: 9px 0 }
+.sidebar.collapsed .sb-logout { justify-content: center; padding: 8px 0 }
+.sidebar.collapsed .sb-footer { padding: 12px 8px }
+
+.sb-toggle {
+  position: absolute;
+  top: 12px;
+  right: -14px;
+  width: 26px; height: 26px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-2);
+  box-shadow: var(--shadow-xs);
+  z-index: 101;
+  transition: background 0.12s;
+}
+.sb-toggle:hover { background: var(--bg) }
+
+/* Deepflow logo in sidebar */
+.sb-deepflow-logo {
+  display: block;
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+/* Deepflow icon mark for collapsed state */
+.sb-icon-sm {
+  width: 32px; height: 32px;
+  flex-shrink: 0;
+}
+.sb-icon-sm svg { width: 100%; height: 100% }
+
+/* NABARD logo in sidebar */
+.sb-nabard-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 44px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+/* Login page logo images */
+.login-deepflow-logo {
+  height: 42px;
+  width: auto;
+  object-fit: contain;
+}
+.login-nabard-logo {
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+}
+.login-footer-nabard {
+  height: 18px;
+  width: auto;
+  object-fit: contain;
+}
+.login-footer-deepflow {
+  height: 16px;
+  width: auto;
+  object-fit: contain;
 }

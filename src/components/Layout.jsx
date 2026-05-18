@@ -36,6 +36,7 @@ async function fetchFromBackend() {
 export default function Layout() {
   const [data, setData]     = useState({ metrics: [], fpos: [], loading: true, error: '', demo: false })
   const [selectedFpo, setSelectedFpo] = useState('All')
+  const [collapsed, setCollapsed] = useState(false)
 
   useEffect(() => {
     // Load sample data immediately; swap to live data if backend responds within 4s
@@ -54,8 +55,8 @@ export default function Layout() {
 
   return (
     <DataContext.Provider value={{ ...data, filtered, selectedFpo }}>
-      <div className="app-shell">
-        <Sidebar fpos={data.fpos} selectedFpo={selectedFpo} onFpoChange={setSelectedFpo} demo={data.demo} />
+      <div className={`app-shell${collapsed ? ' sb-collapsed' : ''}`}>
+        <Sidebar fpos={data.fpos} selectedFpo={selectedFpo} onFpoChange={setSelectedFpo} demo={data.demo} collapsed={collapsed} onToggle={() => setCollapsed(c => !c)} />
         <main className="main-content">
           {data.demo && (
             <div className="demo-banner">

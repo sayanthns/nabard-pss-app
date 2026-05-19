@@ -759,11 +759,62 @@ body {
   .page-inner { padding: 20px 20px 40px }
 }
 
+/* ── Hamburger (mobile only) ─────────────────────────────── */
+.hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-2);
+  padding: 4px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.hamburger:hover { background: var(--bg) }
+
+/* ── Mobile backdrop ─────────────────────────────────────── */
+.mobile-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 99;
+}
+
 @media (max-width: 768px) {
   :root { --sb-w: 0px }
-  .sidebar { transform: translateX(-240px); width: 240px }
+
+  .sidebar {
+    transform: translateX(-240px);
+    width: 240px !important;
+    z-index: 200;
+    transition: transform 0.22s ease;
+  }
+
+  /* Sidebar visible when mobile-open */
+  .app-shell.mobile-open .sidebar {
+    transform: translateX(0);
+  }
+
+  .mobile-backdrop { display: block }
+
   .main-content { margin-left: 0 }
+
   .stat-grid { grid-template-columns: 1fr 1fr }
+
+  /* Hide desktop collapse toggle on mobile */
+  .sb-toggle-desktop { display: none }
+
+  /* Show hamburger */
+  .hamburger { display: flex }
+
+  .top-bar { padding: 10px 16px }
+
+  .page-inner { padding: 16px 16px 40px }
+
+  .chart-row, .analysis-grid { grid-template-columns: 1fr }
 }
 
 /* ── Sidebar collapse ────────────────────────────────────── */

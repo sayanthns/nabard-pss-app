@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import Sidebar from './Sidebar.jsx'
 import { apiUsers, apiMetrics, apiPlots } from '../api.js'
 import { generateSampleData } from '../sampleData.js'
@@ -34,9 +34,14 @@ async function fetchFromBackend() {
 }
 
 export default function Layout() {
-  const [data, setData]       = useState({ metrics: [], fpos: [], loading: true, error: '', demo: false })
+  const [data, setData]           = useState({ metrics: [], fpos: [], loading: true, error: '', demo: false })
   const [selectedFpo, setSelectedFpo] = useState('All')
-  const [collapsed, setCollapsed]     = useState(false)
+  const [collapsed, setCollapsed] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const location = useLocation()
+
+  // Close mobile sidebar on route change
+  useEffect(() => { setMobileOpen(false) }, [location.pathname])
 
   useEffect(() => {
     const { metrics: sampleMetrics, fpos: sampleFpos } = generateSampleData()
@@ -54,12 +59,15 @@ export default function Layout() {
 
   return (
     <DataContext.Provider value={{ ...data, filtered, selectedFpo }}>
-      <div className={`app-shell${collapsed ? ' sb-collapsed' : ''}`}>
+      <div className={`app-shell${collapsed ? ' sb-collapsed' : ''}${mobileOpen ? ' mobile-open' : ''}`}>
+        {/* Mobile backdrop */}
+        {mobileOpen && <div className="mobile-backdrop" onClick={() => setMobileOpen(false)} />}
+
         <Sidebar collapsed={collapsed} />
 
-        {/* Collapse toggle — outside sidebar so it's never clipped */}
+        {/* Desktop collapse toggle */}
         <button
-          className="sb-toggle"
+          className="sb-toggle sb-toggle-desktop"
           onClick={() => setCollapsed(c => !c)}
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
@@ -72,9 +80,14 @@ export default function Layout() {
         </button>
 
         <main className="main-content">
-          {/* Top filter + demo bar */}
           <div className="top-bar">
-            <div className="top-bar-left"></div>
+            {/* Hamburger — mobile only */}
+            <button className="hamburger" onClick={() => setMobileOpen(o => !o)} aria-label="Open menu">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
+                <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/>
+              </svg>
+            </button>
+            <div className="top-bar-left" />
             <div className="top-bar-filter">
               <label className="top-bar-label">Filter by FPO</label>
               <select
